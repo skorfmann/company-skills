@@ -42,8 +42,8 @@ The `context/` directory contains comprehensive documentation about Claude Skill
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/claude-skills.git
-   cd claude-skills
+   git clone https://github.com/skorfmann/company-skills.git
+   cd company-skills
    ```
 
 2. Navigate to the skill directory:
