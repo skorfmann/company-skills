@@ -1,0 +1,125 @@
+# Mise configuration for Claude Skills repository
+# https://mise.jdx.dev/
+
+[tools]
+python = "3.12"
+
+[tasks.build]
+description = "Build and package the bewirtungsbeleg skill as a zip file"
+run = """
+#!/bin/bash
+set -e
+
+SKILL_NAME="bewirtungsbeleg"
+BUILD_DIR="build"
+DIST_DIR="dist"
+SKILL_DIR="skills/${SKILL_NAME}"
+
+echo "🔨 Building ${SKILL_NAME} skill..."
+
+# Clean previous builds
+rm -rf "${BUILD_DIR}" "${DIST_DIR}"
+mkdir -p "${BUILD_DIR}/${SKILL_NAME}" "${DIST_DIR}"
+
+# Copy skill files (excluding only build artifacts, keeping config and signature)
+echo "📦 Copying skill files..."
+rsync -av \
+  --exclude='.venv' \
+  --exclude='__pycache__' \
+  --exclude='*.pyc' \
+  --exclude='.pytest_cache' \
+  --exclude='.claude' \
+  "${SKILL_DIR}/" "${BUILD_DIR}/${SKILL_NAME}/"
+
+# Create the zip file
+echo "📁 Creating zip archive..."
+cd "${BUILD_DIR}"
+zip -r "../${DIST_DIR}/${SKILL_NAME}.zip" "${SKILL_NAME}"
+cd ..
+
+# Cleanup
+rm -rf "${BUILD_DIR}"
+
+echo "✅ Build complete: ${DIST_DIR}/${SKILL_NAME}.zip"
+ls -lh "${DIST_DIR}/${SKILL_NAME}.zip"
+"""
+
+[tasks.build-all]
+description = "Build all skills and create distribution packages"
+run = """
+#!/bin/bash
+set -e
+
+echo "🔨 Building all skills..."
+mise run build
+
+echo "✅ All builds complete!"
+ls -lh dist/
+"""
+
+[tasks.clean]
+description = "Clean build artifacts and temporary files"
+run = """
+#!/bin/bash
+echo "🧹 Cleaning build artifacts..."
+rm -rf build/ dist/ *.zip
+find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+find . -type d -name '.pytest_cache' -exec rm -rf {} + 2>/dev/null || true
+find . -type f -name '*.pyc' -delete
+echo "✅ Clean complete!"
+"""
+
+[tasks.install]
+description = "Install dependencies for bewirtungsbeleg skill"
+run = """
+#!/bin/bash
+cd skills/bewirtungsbeleg
+if command -v uv &> /dev/null; then
+    echo "📦 Installing with uv..."
+    uv sync
+else
+    echo "📦 Installing with pip..."
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install -e .
+fi
+echo "✅ Dependencies installed!"
+"""
+
+[tasks.setup]
+description = "Setup the bewirtungsbeleg skill for first-time use"
+run = """
+#!/bin/bash
+set -e
+
+SKILL_DIR="skills/bewirtungsbeleg"
+
+echo "🚀 Setting up bewirtungsbeleg skill..."
+
+# Check if config.yml exists
+if [ ! -f "${SKILL_DIR}/config.yml" ]; then
+    echo "📝 Creating config.yml from template..."
+    cp "${SKILL_DIR}/config.example.yml" "${SKILL_DIR}/config.yml"
+    echo "⚠️  Please edit ${SKILL_DIR}/config.yml with your details"
+else
+    echo "✅ config.yml already exists"
+fi
+
+# Check if signature.png exists
+if [ ! -f "${SKILL_DIR}/assets/signature.png" ]; then
+    echo "⚠️  Please add your signature image to ${SKILL_DIR}/assets/signature.png"
+    echo "   See ${SKILL_DIR}/assets/signature.example.png for reference"
+else
+    echo "✅ signature.png exists"
+fi
+
+# Install dependencies
+mise run install
+
+echo "✅ Setup complete!"
+echo ""
+echo "Next steps:"
+echo "1. Edit ${SKILL_DIR}/config.yml with your details"
+echo "2. Add your signature to ${SKILL_DIR}/assets/signature.png"
+echo "3. Run 'mise run build' to create a distribution package"
+"""

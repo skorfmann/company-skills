@@ -1,0 +1,71 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude local settings
+.claude/
+
+# Test files and outputs
+*.pdf
+*.jpeg
+*.jpg
+*.png
+*.zip
+# But allow example assets
+!skills/*/assets/signature.example.png
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local configuration (contains personal data)
+skills/*/config.yml
+
+# Skills not ready for publication
+skills/cropping-and-deskewing-receipts/
+skills/uploading-to-google-drive/
+.claude/skills/cropping-and-deskewing-receipts/
+.claude/skills/uploading-to-google-drive/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Build artifacts
+build/
+dist/
