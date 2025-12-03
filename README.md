@@ -1,6 +1,70 @@
 # Claude Skills Repository
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/skorfmann/company-skills?style=social)](https://github.com/skorfmann/company-skills/stargazers)
+[![GitHub last commit](https://img.shields.io/github/last-commit/skorfmann/company-skills)](https://github.com/skorfmann/company-skills/commits/main)
+[![GitHub issues](https://img.shields.io/github/issues/skorfmann/company-skills)](https://github.com/skorfmann/company-skills/issues)
+
 A repository showcasing custom Claude Skills with documentation and reference materials for building specialized capabilities.
+
+## Table of Contents
+
+- [Quick Start - Get Started in 5 Minutes](#quick-start---get-started-in-5-minutes)
+- [What's Included](#whats-included)
+  - [Skills](#skills)
+  - [Context & Documentation](#context--documentation)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installing a Skill](#installing-a-skill)
+  - [Using Skills with Claude](#using-skills-with-claude)
+- [Development Tasks](#development-tasks)
+- [What are Claude Skills?](#what-are-claude-skills)
+- [Repository Structure](#repository-structure)
+- [Creating Your Own Skills](#creating-your-own-skills)
+- [Contributing](#contributing)
+- [License](#license)
+- [Resources](#resources)
+- [Support](#support)
+
+## Quick Start - Get Started in 5 Minutes
+
+Want to try out the Bewirtungsbeleg skill right away? Follow these five simple steps:
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/skorfmann/company-skills.git
+cd company-skills/skills/bewirtungsbeleg
+```
+
+### Step 2: Set Up Configuration
+```bash
+cp config.example.yml config.yml
+```
+Edit `config.yml` and add your name/company:
+```yaml
+gastgeber: "Your Name / Your Company Name"
+```
+
+### Step 3: Add Your Signature
+Place your signature image at `assets/signature.png` (see `assets/signature.example.png` for format reference).
+
+### Step 4: Install Dependencies
+```bash
+# Using uv (recommended)
+uv sync
+
+# Or using pip
+pip install -e .
+```
+
+### Step 5: Start Using the Skill
+You're ready! The skill will now:
+- Analyze restaurant receipt photos
+- Extract information automatically
+- Generate tax-compliant German Bewirtungsbeleg PDFs
+- Merge receipts with signed expense forms
+
+💡 **Tip:** Use with Claude Code CLI for automatic skill discovery, or run standalone using the provided scripts. See [Using Skills with Claude](#using-skills-with-claude) for details.
 
 ## What's Included
 
